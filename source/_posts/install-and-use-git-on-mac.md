@@ -6,17 +6,17 @@ tags:
 ## git的安装
 原本，我应该按照以下方式去安装git：
 
-![](./install-git.png)
+{% asset_img install-git.png %}
 
 安装之前，检查一下未安装git时提示什么信息，发现git已经安装好了
 
-![](./check-git.png)
+{% asset_img check-git.png %}
 
 原来，我之前安装了Xcode，Xcode集成了git，所以不需要另外安装了。
 
 ## git配置
 首先配置用户信息，这个很重要，因为每次提交代码的时候都会使用这些信息。
-![](./git-config.png)
+{% asset_img git-config.png %}
 
 检查配置信息：`git config --list`
 
@@ -24,7 +24,8 @@ tags:
 
 ## 生成ssh key
 1. 使用github的email生成ssh key
-    ![](./generate-key.png)
+
+    {% asset_img generate-key.png %}
 
 2. 检查ssh key
 
@@ -39,12 +40,12 @@ tags:
 4. 复制ssh key，并添加到github中
 
     `cat .ssh/id_rsa.pud`
-    ![](./add-sshkey.png)
+    {% asset_img add-sshkey.png %}
 
 5. 验证
 
     `ssh -T git@github.com`
-    ![](./verify-sshkey.png)
+    {% asset_img verify-sshkey.png %}
 
     验证成功，但是出现了警告信息，这个警告信息其实不会有什么影响，但是看着很难受，按照警告的要求把它消除掉吧。
 
@@ -52,7 +53,7 @@ tags:
 
     重新验证一下，问题解决啦。
 
-    ![](./reverify.png)
+    {% asset_img reverify.png %}
 
 ## 使用
 

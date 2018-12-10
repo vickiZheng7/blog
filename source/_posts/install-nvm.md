@@ -13,17 +13,19 @@ tags:
 1. 安装或者更新nvm，在终端窗口输入：
 
     `curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash`
-    ![](./nvm安装.png)
+    
+    {% asset_img nvm安装.png %}
 
 2. 设置环境变量
 
     根据安装之后的提示，设置环境变量，nvm才能正常使用。
-
-    ```cmd
+    
+    {% codeblock %}
     export NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    ```
-![](./nvm版本.png)
+    {% endcodeblock %}
+    
+    {% asset_img nvm版本.png %}
 
 ## 使用
 1. 安装node
