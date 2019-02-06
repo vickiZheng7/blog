@@ -1,22 +1,20 @@
----
-title: mac下git的安装及使用
-date: 2018-12-10 23:36:45
-tags:
----
-## git的安装
+# mac下安装git
+
+## 安装
+
 原本，我应该按照以下方式去安装git：
 
-{% asset_img install-git.png %}
+![](./install-git.png)
 
 安装之前，检查一下未安装git时提示什么信息，发现git已经安装好了
 
-{% asset_img check-git.png %}
+![](./check-git.png)
 
 原来，我之前安装了Xcode，Xcode集成了git，所以不需要另外安装了。
 
-## git配置
+## 配置
 首先配置用户信息，这个很重要，因为每次提交代码的时候都会使用这些信息。
-{% asset_img git-config.png %}
+![](git-config.png)
 
 检查配置信息：`git config --list`
 
@@ -25,7 +23,7 @@ tags:
 ## 生成ssh key
 1. 使用github的email生成ssh key
 
-    {% asset_img generate-key.png %}
+    ![](generate-key.png)
 
 2. 检查ssh key
 
@@ -40,12 +38,12 @@ tags:
 4. 复制ssh key，并添加到github中
 
     `cat .ssh/id_rsa.pud`
-    {% asset_img add-sshkey.png %}
+    ![](./add-sshkey.png)
 
 5. 验证
 
     `ssh -T git@github.com`
-    {% asset_img verify-sshkey.png %}
+    ![](verify-sshkey.png)
 
     验证成功，但是出现了警告信息，这个警告信息其实不会有什么影响，但是看着很难受，按照警告的要求把它消除掉吧。
 
@@ -53,7 +51,7 @@ tags:
 
     重新验证一下，问题解决啦。
 
-    {% asset_img reverify.png %}
+    ![](reverify.png)
 
 ## 使用
 
@@ -63,26 +61,26 @@ tags:
 
 2. 初始化本地代码目录作为Git仓库
 
-	`git init`
+  `git init`
 
 3. 将当前目录下的所有文件添加到本地仓库中
 
-	`git add .`
+  `git add .`
 
 4. 提交文件
 
-	`git commit -m "commit message"`
+  `git commit -m "commit message"`
 
 5. 从仓库拷贝新建的仓库地址
 
 6. 添加远程仓库的地址
 
-	`git remote add origin <git address>`
+  `git remote add origin <git address>`
 
-	查看远程仓库地址：`git remote -v`
+  查看远程仓库地址：`git remote -v`
 
 7. 将本地仓库推送到远程github上
 
-	`git push -u origin master`
+  `git push -u origin master`
 
-	如果提示冲突的话，使用`git push -u origin master -f`强制推送
+  如果提示冲突的话，使用`git push -u origin master -f`强制推送
