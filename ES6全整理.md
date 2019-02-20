@@ -442,3 +442,246 @@ var regex = new RegExp(/a+/y)
 regex.sticky //true
 ```
 
+## 数值拓展
+
+### 二进制八进制表示法
+
+ES5中不同进制的表示法：
+
+二进制：没找着...
+
+八进制：`0123 === 83，`以`0`为前缀，如果后面数字均小于8，该数值会被视为八进制，但如果存在8或9，该数值会被视为十进制，这种判断模式很容易混乱。因此，严格模式下不允许使用`0`作为前缀表示八进制。
+
+十六进制：`0x00FF ===255 `，常见的颜色代码就是用十六进制表示的。
+
+ES6提出了二进制和八进制新的表示法：
+
+二进制：`0b10101010 === 170`，以`0b`(`0B`)作为二进制写法的前缀。
+
+八进制：`0o123 === 83`，以`0o`(`0O`)作为八进制写法的前缀，为了兼容旧代码，浏览器还是继续支持`0`作为前缀的表示法。
+
+### Number对象拓展
+
+#### isFinite()
+
+检查数值是否为有限值，即不为Infinity。
+
+```javascript
+Number.isFinite(1024) //true
+Number.isFinite(Infinity) //false
+Number.isFinite(NaN) //false
+Number.isFinite("12") //false
+Number.isFinite("12bb") //false
+```
+
+除了Infinity，参数类型不为数值也会返回false。
+
+```javascript
+isFinite("12") //true
+isFinite("12bb") //false
+```
+
+与全局方法`isFinite`的区别在于：在判断参数之前，全局方法`isFinite`会调用`Number()`将参数转为数值，而`Number.isFinite`对于非数值的参数一律返回`false`。
+
+#### isNaN()
+
+检查数值是否为NaN。
+
+```javascript
+Number.isNaN(NaN) //true
+
+Number.isNaN("NaN") //false
+isNaN("NaN") //true
+
+Number.isNaN("1212") //false
+isNaN("1212") //false
+```
+
+与全局方法`isNaN`的区别在于：在判断参数之前，全局方法`isNaN`会调用`Number()`将参数转为数值，而`Number.isNaN`对于非`NaN`的参数一律返回`false`。
+
+#### isInteger()
+
+判断数值是否为整数。
+
+```javascript
+Number.isInteger(123) //true
+Number.isInteger(100.0) //true
+Number.isInteger(100.1) //false
+Number.isInteger("12") //false
+```
+
+参数类型非数值，一律返回`false`。
+
+```javascript
+Number.isInteger(3.0000000000000002) // true
+```
+
+JS采用64位双精度格式存储数值，一旦精度值超过53位(1个隐藏位和52个有效位)，超过的部分直接忽略，此时可能出现数据误判问题。
+
+#### parseInt()和parseFloat()
+
+ES6将全局方法`parseInt`和`parseFloat`一直到`Number`对象上，行为保持一致。
+
+```javascript
+parseInt === Number.parseInt //true
+parseFloat === Number.parseFloat //true
+```
+
+#### EPSILON
+
+极小的常量，是JS能达到的最小精度，常用来设置JavsScript能够接受的误差范围。
+
+#### 安全整数
+
+一旦数值超出`-2^53`~`2^53`范围，就不能被准确表示。
+
+##### MIN_SAFE_INTEGER和MAX_SAFE_INTEGER
+
+表示能准确表示的数值范围的上下边界。
+
+##### isSafeInteger()
+
+检查数值是否在处于安全范围之内(`MIN_SAFE_INTEGER`~`MAX_SAFE_INTEGER`)
+
+### Math对象拓展
+
+#### trunc()
+
+除去数值的小数部分。
+
+```javascript
+Math.trunc(1.23) //1
+Math.trunc(1.9) //1
+
+Math.trunc("1.23") //1
+Math.trunc(true) //1
+Math.trunc(false) //0
+
+Math.trunc(NaN) //NaN
+Math.trunc("hello") //NaN
+Math.trunc() //NaN
+```
+
+若参数非数值，则先通过`Number()`进行转换。如果参数为空或参数转换结果为`NaN`，一律返回`NaN`。
+
+#### sign()
+
+判断数值是负数、0还是正数。
+
+若参数非数值，则先通过`Number()`进行转换。
+
+```javascript
+Math.sign(-1) //-1
+Math.sign(-0) //-0
+Math.sign(0) //0
+Math.sign(1) //1
+Math.sign(NaN) //NaN
+```
+
+若参数非数值，则先通过`Number()`进行转换。如果参数为空或参数转换结果为`NaN`，一律返回`NaN`。
+
+#### cbrt()
+
+用于立方根计算。
+
+```javascript
+Math.cbrt(8) //2
+```
+
+若参数非数值，则先通过`Number()`进行转换。如果参数为空或参数转换结果为`NaN`，一律返回`NaN`。
+
+#### clz32()
+
+将数值转成32位无符号整数形式，并统计有多少个前导0。
+
+```javascript
+Math.clz32(0) //32
+Math.clz32(1) //31
+Math.clz32(0b01000000000000000000000000000000) //1
+Math.clz32(1 << 10) //21
+Math.clz32(3.2) //30
+Math.clz32() //32
+```
+
+`clz32`这个函数名就来自”count leading zero bits in 32-bit binary representation of a number“的缩写。 
+
+若参数为小数，则取整数部分进行前导0统计。
+
+若参数非数值，则先通过`Number()`进行转换。如果参数为空或参数转换结果为`NaN`，一律返回32。
+
+#### imul()
+
+乘法计算。等同于`(a * b) | 0`，超出32位的部分溢出。
+
+```javascript
+Math.imul(-3, 3) //9
+```
+
+因为JavaScript有精度限制，所以很大的数的乘法，结果的低位数值往往是不准确的，使用`imul`方法可以返回准确的低位数值。
+
+```javascript
+Math.imul(0x7fffffff, 0x7fffffff) //1
+```
+
+#### fround()
+
+返回一个数的32位单精度浮点数形式 。可用于将64位双精度浮点数转为32位单精度浮点数。
+
+```javascript
+Math.fround(2) //2
+Math.fround(2 ** 24) //16777216
+Math.fround(2 ** 24 + 1) //16777216
+
+Math.fround(1.25) //1.25
+Math.fround(NaN) //NaN
+Math.fround(Infinity) //Infinity
+```
+
+单精度浮点数数值范围在`-2^24`~`2^24`之间，如果超过这个范围，就会丢失精度。
+
+对于NaN和Infinity，则返回原值。
+
+#### hypot()
+
+计算所有数值平方和的平方根（两个值的话岂不就是勾股定理？）。
+
+```javascript
+Math.hypot(3, 4) //5
+Math.hypot(3, "4") //5
+Math.hypot(3, 4, 5) //7.0710678118654755
+Math.hypot() //0
+Math.hypot(NaN) //NaN
+Math.hypot(3, "abc") //NaN
+```
+
+若参数非数值，则先通过`Number()`进行转换。如果参数为空， 返回0，如果参数转换结果为`NaN`，一律返回`NaN`。
+
+#### expm1()
+
+`Math.expm1(x)`等同于`Math.exp(x) - 1`。
+
+#### log1p()
+
+`Math.log1p(x)`等同于`Math.log(1 + x)`，x小于-1时返回`NaN`。
+
+#### log2()和log10()
+
+显而易见，不解释。
+
+#### 指数运算符(**)
+
+```javascript
+2 ** 2 //4
+2 ** 2 ** 3 //256
+```
+
+多指数运算符连用时，右结合计算。
+
+##### 指数赋值运算符(**=)
+
+```javascript
+let a = 2
+a **= 2
+a //4
+```
+
